@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>English Trainer</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary: #2563eb;
+        --secondary: #7c3aed;
+        --success: #22c55e;
+        --danger: #ef4444;
+        --bg: #f3f4f6;
+        --card: #ffffff;
+        --text: #111827;
+      }
+
+      .dark {
+        --bg: #111827;
+        --card: #1f2937;
+        --text: #f9fafb;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        min-height: 100vh;
+        padding: 20px;
+        color: var(--text);
+      }
+
+      .container {
+        max-width: 850px;
+        margin: auto;
+        background: var(--card);
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      }
+
+      h1 {
+        text-align: center;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 10px;
+      }
+
+      .darkBtn {
+        background: #111827;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .stat {
+        background: #e5e7eb;
+        padding: 12px;
+        border-radius: 12px;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .progress {
+        height: 15px;
+        background: #d1d5db;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+
+      .progressFill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+        transition: 0.5s;
+      }
+
+      .category {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 20px;
+        background: #dbeafe;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .question {
+        font-size: 1.6rem;
+        text-align: center;
+        margin: 25px 0;
+        line-height: 1.4;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      input {
+        padding: 15px;
+        font-size: 1.1rem;
+        width: 260px;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+      }
+
+      button {
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+      }
+
+      .check {
+        background: var(--primary);
+        color: white;
+      }
+
+      .listen {
+        background: var(--secondary);
+        color: white;
+      }
+
+      .word {
+        background: #ea580c;
+        color: white;
+      }
+
+      .feedback {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        min-height: 40px;
+      }
+
+      .correct {
+        color: var(--success);
+      }
+
+      .incorrect {
+        color: var(--danger);
+      }
+
+      .result {
+        display: none;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .badge {
+        font-size: 1.4rem;
+        margin: 15px 0;
+      }
+
+      footer {
+        margin-top: 25px;
+        text-align: center;
+        color: white;
+      }
+
+      .socials {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 25px;
+        margin: 20px 0;
+      }
+
+      .socials a {
+        font-size: 2.2rem;
+        transition: 0.3s;
+      }
+
+      .socials a:hover {
+        transform: scale(1.2);
+      }
+
+      .fa-whatsapp {
+        color: #25d366;
+      }
+      .fa-instagram {
+        color: #e1306c;
+      }
+      .fa-facebook {
+        color: #1877f2;
+      }
+      .fa-youtube {
+        color: #ff0000;
+      }
+      .fa-globe {
+        color: white;
+      }
+
+      @media (max-width: 600px) {
+        .question {
+          font-size: 1.2rem;
+        }
+
+        input {
+          width: 100%;
+        }
+
+        .controls {
+          flex-direction: column;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="topbar">
+        <button class="" onclick="toggleDarkMode()"></button>
+      </div>
+
+      <h1>Ejercicio en línea de inglés</h1>
+
+      <p class="subtitle">Pruebe sus conocimientos escribiendo la palabra palabra faltante en el espacio asignado</p>
+
+      <div class="stats">
+        <div class="stat">
+          Puntuación<br />
+          <span id="score">0</span>
+        </div>
+
+        <div class="stat">
+          🔥 Racha respuestas<br />
+          <span id="streak">0</span>
+        </div>
+
+        <div class="stat">
+          Pregunta<br />
+          <span id="counter">1</span>/15
+        </div>
+      </div>
+
+      <div class="progress">
+        <div class="progressFill" id="progressFill"></div>
+      </div>
+
+      <div id="game">
+        <div class="category" id="category"></div>
+
+        <div class="question" id="question"></div>
+
+        <div class="controls">
+          <input
+            id="answer"
+            type="text"
+            placeholder="Escriba palabra faltante aquí"
+          />
+
+          <button class="check" onclick="checkAnswer()">
+            ✅ Revisar respuesta
+          </button>
+
+          <button class="listen" onclick="readSentence()">🔊 Oración</button>
+
+          <button class="word" onclick="readWord()">
+            🎧 Oír palabra faltante
+          </button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+      </div>
+
+      <div class="result" id="result">
+        <h2>🏆 Exercise Completed</h2>
+
+        <h3 id="finalScore"></h3>
+
+        <div class="badge" id="badge"></div>
+
+        <button class="check" onclick="restartGame()">Play Again</button>
+      </div>
+    </div>
+
+    <footer>
+      <h3>Ejercicio en línea creado y diseñado en Santiago de Puriscal, San José,
+        Costa Rica.
+      </p></h3>
+
+      
+
+      <div class="socials">
+        <a href="https://walink.co/341b8e" target="_blank">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+
+        <a href="https://www.instagram.com/josbrevar07/" target="_blank">
+          <i class="fab fa-instagram"></i>
+        </a>
+
+        <a href="https://www.facebook.com/josue.brenesvargas" target="_blank">
+          <i class="fab fa-facebook"></i>
+        </a>
+
+        <a href="https://www.youtube.com/@josbrevar0773" target="_blank">
+          <i class="fab fa-youtube"></i>
+        </a>
+
+        <a href="https://clases-de-manejo-personalizadas.com" target="_blank">
+          <i class="fas fa-globe"></i>
+        </a>
+      </div>
+
+      <p>Designed by: Josbrevar 07</p>
+    </footer>
+
+    <script>
+      const questionBank = [
+        { cat: "Hecho o estado", sentence: "I ___ a teacher.", answer: "am" },
+        {
+          cat: "Hecho o estado",
+          sentence: "You ___ my friend.",
+          answer: "are",
+        },
+        { cat: "Hecho o estado", sentence: "I ___ happy today.", answer: "am" },
+        {
+          cat: "Hecho o estado",
+          sentence: "You ___ from Costa Rica.",
+          answer: "are",
+        },
+
+        { cat: "Hecho o estado", sentence: "I ___ a bicycle.", answer: "have" },
+        { cat: "Hecho o estado", sentence: "You ___ a dog.", answer: "have" },
+        {
+          cat: "Hecho o estado",
+          sentence: "I ___ brown eyes.",
+          answer: "have",
+        },
+        {
+          cat: "Rutina",
+          sentence: "You ___ English class today.",
+          answer: "have",
+        },
+
+        {
+          cat: "Rutina",
+          sentence: "I ___ breakfast every morning.",
+          answer: "eat",
+        },
+        {
+          cat: "Rutina",
+          sentence: "You ___ English every day.",
+          answer: "study",
+        },
+        { cat: "Rutina", sentence: "I ___ to work by bus.", answer: "go" },
+        {
+          cat: "Rutina",
+          sentence: "You ___ coffee in the morning.",
+          answer: "drink",
+        },
+        {
+          cat: "Rutina",
+          sentence: "I ___ my homework at night.",
+          answer: "do",
+        },
+        {
+          cat: "Rutina",
+          sentence: "You ___ soccer on Saturdays.",
+          answer: "play",
+        },
+
+        { cat: "Preferencia", sentence: "I ___ music.", answer: "like" },
+        { cat: "Preferencia", sentence: "You ___ pizza.", answer: "like" },
+        {
+          cat: "Preferencia",
+          sentence: "I ___ action movies.",
+          answer: "like",
+        },
+        {
+          cat: "Preferencia",
+          sentence: "You ___ video games.",
+          answer: "like",
+        },
+
+        {
+          cat: "Hecho o estado",
+          sentence: "I ___ in Liberia.",
+          answer: "live",
+        },
+        {
+          cat: "Hecho o estado",
+          sentence: "You ___ near the mountains.",
+          answer: "live",
+        },
+      ];
+
+      let selected = [];
+      let current = 0;
+      let score = 0;
+      let streak = 0;
+
+      function shuffle(arr) {
+        return [...arr].sort(() => Math.random() - 0.5);
+      }
+
+      function startGame() {
+        selected = shuffle(questionBank).slice(0, 15);
+
+        current = 0;
+        score = 0;
+        streak = 0;
+
+        loadQuestion();
+      }
+
+      function loadQuestion() {
+        let q = selected[current];
+
+        document.getElementById("question").textContent = q.sentence;
+        document.getElementById("category").textContent = q.cat;
+        document.getElementById("answer").value = "";
+        document.getElementById("feedback").innerHTML = "";
+        document.getElementById("counter").textContent = current + 1;
+
+        document.getElementById("progressFill").style.width =
+          (current / 15) * 100 + "%";
+
+        setTimeout(readSentence, 500);
+      }
+
+      function speak(text) {
+        speechSynthesis.cancel();
+
+        let utter = new SpeechSynthesisUtterance(text);
+
+        utter.lang = "en-US";
+        utter.rate = 0.9;
+        utter.pitch = 1;
+
+        speechSynthesis.speak(utter);
+      }
+
+      function readSentence() {
+        let text = selected[current].sentence.replace("___", "blank");
+
+        speak(text);
+      }
+
+      function readWord() {
+        let word = selected[current].answer;
+
+        speak(word);
+      }
+
+      function playCorrect() {
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+
+        osc.frequency.value = 700;
+
+        osc.connect(ctx.destination);
+
+        osc.start();
+
+        osc.stop(ctx.currentTime + 0.15);
+      }
+
+      function playWrong() {
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+
+        osc.frequency.value = 220;
+
+        osc.connect(ctx.destination);
+
+        osc.start();
+
+        osc.stop(ctx.currentTime + 0.25);
+      }
+
+      function checkAnswer() {
+        const user = document
+          .getElementById("answer")
+          .value.trim()
+          .toLowerCase();
+
+        const correct = selected[current].answer.toLowerCase();
+
+        if (user === correct) {
+          score++;
+          streak++;
+          playCorrect();
+
+          document.getElementById("feedback").innerHTML =
+            '<span class="correct">✅ Correct!</span>';
+        } else {
+          streak = 0;
+          playWrong();
+
+          document.getElementById("feedback").innerHTML =
+            '<span class="incorrect">❌ Correct answer: ' + correct + "</span>";
+        }
+
+        document.getElementById("score").textContent = score;
+        document.getElementById("streak").textContent = streak;
+
+        setTimeout(() => {
+          current++;
+
+          if (current >= 15) {
+            showResults();
+          } else {
+            loadQuestion();
+          }
+        }, 1200);
+      }
+
+      function showResults() {
+        document.getElementById("game").style.display = "none";
+        document.getElementById("result").style.display = "block";
+
+        document.getElementById("progressFill").style.width = "100%";
+
+        document.getElementById("finalScore").innerText = score + " / 15";
+
+        let badge = "Explorer";
+
+        if (score >= 13) {
+          badge = "🏆 Master Speaker";
+        } else if (score >= 10) {
+          badge = "⭐ English Champion";
+        } else if (score >= 7) {
+          badge = "🚀 Communicator";
+        }
+
+        document.getElementById("badge").innerText = badge;
+      }
+
+      function restartGame() {
+        document.getElementById("game").style.display = "block";
+        document.getElementById("result").style.display = "none";
+
+        startGame();
+      }
+
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark");
+      }
+
+      document
+        .getElementById("answer")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            checkAnswer();
+          }
+        });
+
+      startGame();
+    </script>
+  </body>
+</html>
